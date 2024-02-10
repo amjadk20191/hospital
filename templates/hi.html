@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device.width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+<form id="form">
+    <input type="text" name="message"/>
+
+
+</form>
+<div id="messages">   </div>
+<h1 id="number">{{count}}</h1>
+<h1 id="number1">{{count1}}</h1>
+</body>
+<script type="text/javascript">
+
+
+    let u=`ws://${window.location.host}/ws/socket-server/`
+
+
+    
+    const so=new WebSocket(u+ "?token=" + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA1MjU5NzY5LCJpYXQiOjE2NzkzMzk3NjksImp0aSI6ImNhZTE3YjAzYzNkMzRkMzhiZjZiYTViOTQ0Y2RlOTIzIiwidXNlcl9pZCI6MTl9.TIE54Cr5rEr5L21I4XvfoJFWxogZu_-TIJJ9t1D25Jo")
+    so.onmessage= function(e){
+    let data = JSON.parse(e.data);
+    console.log('Data:',data)
+    if(data.type=='chat'){
+    let messages=document.getElementById('messages')
+    messages.insertAdjacentHTML('beforeend','<div><p> ${data.message}</p>></>div>')    }
+
+
+    document.querySelector('#number').innerText= data.Location;
+    document.querySelector('#number1').innerText= data.Name;
+
+
+
+    }
+
+    let form =document.getElementById('form')
+    form.addEventListener('submit',(e)=>{
+    e.preventDefault()
+    let message= e.target.message.value
+    so.send(JSON.stringify({
+    'message':message
+    }))
+    form.reset()
+
+
+    })
+
+
+
+
+</script>
+</html>
